@@ -55,6 +55,7 @@ public class AuthFacadeImpl implements AuthFacade {
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
+        user.setFullName(userDto.getFullName());
         user.setPasswordHash(BCrypt.hashpw(rawPassword, BCrypt.gensalt()));
         user.setRole(userDto.getRole() != null ? userDto.getRole() : "CUSTOMER");
 
@@ -93,6 +94,7 @@ public class AuthFacadeImpl implements AuthFacade {
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
         dto.setRole(user.getRole());
         return dto;
     }

@@ -71,7 +71,8 @@ public class Module extends AbstractModule {
                     getProperty("db.connection.password", "airline123"));
 
             // Hibernate settings
-            jpaProps.put("hibernate.hbm2ddl.auto", "update");
+            jpaProps.put("hibernate.hbm2ddl.auto",
+                    getProperty("hibernate.hbm2ddl.auto", "validate"));
             jpaProps.put("hibernate.dialect",
                     "org.hibernate.dialect.PostgreSQLDialect");
             jpaProps.put("hibernate.show_sql", "true");
