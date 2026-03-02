@@ -1,0 +1,64 @@
+# ─── Compiled Output ────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ─── Maven ──────────────────────────────────────────────────
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ─── IDE: IntelliJ IDEA ────────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ─── IDE: Eclipse ───────────────────────────────────────────
+.classpath
+.project
+.settings/
+bin/
+
+# ─── IDE: VS Code ──────────────────────────────────────────
+.vscode/
+
+# ─── IDE: NetBeans ──────────────────────────────────────────
+nbproject/private/
+nbbuild/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# ─── OS Files ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ─── Logs ───────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── Environment & Secrets ──────────────────────────────────
+.env
+.env.*
+*.env
+application-local.conf
+application-secret.conf
+**/conf/application.conf
+
+# ─── Temporary Files ───────────────────────────────────────
+*.tmp
+*.swp
+*.swo
+*~
