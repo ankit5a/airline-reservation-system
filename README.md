@@ -12,25 +12,25 @@ airline-reservation/
 └── pom.xml                 # Parent Maven project
 ```
 
-| Module | Responsibility |
-|---|---|
-| `airline-entities` | Domain model: `User`, `Flight`, `Booking`, `Passenger` |
-| `airline-web-dtos` | API contracts: request/response DTO classes |
-| `airline-web` | REST controllers, business logic, ACL/CORS filters, routing, config |
+| Module             | Responsibility                                                      |
+| ------------------ | ------------------------------------------------------------------- |
+| `airline-entities` | Domain model: `User`, `Flight`, `Booking`, `Passenger`              |
+| `airline-web-dtos` | API contracts: request/response DTO classes                         |
+| `airline-web`      | REST controllers, business logic, ACL/CORS filters, routing, config |
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Language | Java 17 |
-| Framework | Ninja 6.8.0 |
-| DI | Google Guice + Guice Persist |
-| ORM/JPA | Hibernate 4.x + `javax.persistence` |
-| Database | PostgreSQL |
-| JSON | Jackson |
-| Password Hashing | BCrypt (`jbcrypt`) |
-| Logging | Logback |
-| Build | Maven |
+| Layer            | Technology                          |
+| ---------------- | ----------------------------------- |
+| Language         | Java 17                             |
+| Framework        | Ninja 6.8.0                         |
+| DI               | Google Guice + Guice Persist        |
+| ORM/JPA          | Hibernate 4.x + `javax.persistence` |
+| Database         | PostgreSQL                          |
+| JSON             | Jackson                             |
+| Password Hashing | BCrypt (`jbcrypt`)                  |
+| Logging          | Logback                             |
+| Build            | Maven                               |
 
 ## Prerequisites
 
@@ -138,6 +138,7 @@ http://localhost:8081
 ```
 
 Expected:
+
 - `200 OK`
 - `success=true`
 - `data.id` populated
@@ -155,11 +156,13 @@ Expected:
 ```
 
 Expected:
+
 - `200 OK`
 - `data.token` present
 - session cookie set
 
 Invalid credentials expected:
+
 - `401 Unauthorized`
 
 ### 3) Logout
@@ -168,6 +171,7 @@ Invalid credentials expected:
 - Body: none
 
 Expected:
+
 - `200 OK`
 - session cleared
 
@@ -178,6 +182,7 @@ Expected:
 - `GET /api/flights`
 
 Expected:
+
 - `200 OK`
 - `data` is array
 
@@ -186,6 +191,7 @@ Expected:
 - `GET /api/flights/{id}`
 
 Expected:
+
 - `200 OK` if exists
 - `404` if not found
 
@@ -194,6 +200,7 @@ Expected:
 - `GET /api/flights/search?origin=DELHI&destination=MUMBAI`
 
 Expected:
+
 - `200 OK`
 - filtered results
 
@@ -215,6 +222,7 @@ Expected:
 ```
 
 Expected:
+
 - `200 OK` for admin session
 - `401/403` if unauthorized
 
@@ -232,6 +240,7 @@ Expected:
 ```
 
 Expected:
+
 - `200 OK` if admin + flight exists
 - `404` if flight not found
 
@@ -240,6 +249,7 @@ Expected:
 - `DELETE /api/flights/{id}`
 
 Expected:
+
 - `200 OK` if admin + flight exists
 - `404` if not found
 
@@ -264,6 +274,7 @@ Expected:
 ```
 
 Expected:
+
 - `200 OK` booking created
 - `404` if flight missing
 - `400` invalid payload
@@ -281,6 +292,7 @@ Expected:
 ```
 
 Expected:
+
 - `200 OK`
 
 ### 12) Get booking by id
@@ -288,6 +300,7 @@ Expected:
 - `GET /api/bookings/{id}`
 
 Expected:
+
 - `200 OK` if found and permitted
 - `404` if not found
 
@@ -296,6 +309,7 @@ Expected:
 - `GET /api/bookings`
 
 Expected:
+
 - `200 OK` for roles with `VIEW_ALL_BOOKINGS`
 - `403` for insufficient permission
 
@@ -304,6 +318,7 @@ Expected:
 - `GET /api/bookings/my`
 
 Expected:
+
 - `200 OK`
 - user-scoped bookings
 
@@ -312,6 +327,7 @@ Expected:
 - `DELETE /api/bookings/{id}`
 
 Expected:
+
 - `200 OK` if found + permitted
 - `404` if not found
 
@@ -342,5 +358,4 @@ curl -i -c cookie.txt -b cookie.txt -X POST "$BASE/api/auth/logout"
 
 ## Notes
 
-- `fullName` is accepted in register payload but is not yet persisted in the `users` table.
 - `GET /api/flights/search` accepts `date` param in route, but date filtering is not currently applied.
