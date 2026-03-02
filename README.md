@@ -40,32 +40,20 @@ airline-reservation/
 
 ## Configuration
 
-Main runtime file:
+Runtime files:
 
-- `/Users/ankitanand/airline-reservation/airline-web/src/main/resources/conf/application.conf`
+- `airline-web/src/main/resources/conf/application.conf`
+- `airline-web/src/main/resources/conf/example.application.conf`
 
-Key properties:
-
-```properties
-application.modules.package=com.airline
-ninja.port=8081
-
-db.connection.url=jdbc:postgresql://localhost:5432/airline_db
-db.connection.username=airline_user
-db.connection.password=airline123
-```
-
-Example template:
-
-- `/Users/ankitanand/airline-reservation/airline-web/src/main/resources/conf/example.application.conf`
+Use placeholders in `example.application.conf` and create your local `application.conf` with your own values.
 
 ## Database Setup
 
 ### 1) Create role/database
 
 ```sql
-CREATE USER airline_user WITH PASSWORD 'airline123';
-CREATE DATABASE airline_db OWNER airline_user;
+CREATE USER <db_user> WITH PASSWORD '<db_password>';
+CREATE DATABASE <db_name> OWNER <db_user>;
 ```
 
 ### 2) Ensure schema permissions (if needed)
@@ -73,11 +61,11 @@ CREATE DATABASE airline_db OWNER airline_user;
 If you see permission errors on schema `public`, run:
 
 ```sql
-GRANT USAGE, CREATE ON SCHEMA public TO airline_user;
-ALTER SCHEMA public OWNER TO airline_user;
+GRANT USAGE, CREATE ON SCHEMA public TO <db_user>;
+ALTER SCHEMA public OWNER TO <db_user>;
 ```
 
-> The app uses `hibernate.hbm2ddl.auto=update`, so tables are auto-created/updated at startup when permissions are correct.
+> The app uses schema auto-update at startup, so tables are created/updated when DB permissions are correct.
 
 ## Build and Run
 
@@ -90,7 +78,7 @@ mvn -pl airline-web -DskipTests ninja:run
 
 Server URL:
 
-- `http://localhost:8081`
+- `http://localhost:8081` (or the port configured in your local `application.conf`)
 
 ## API Response Format
 
@@ -113,10 +101,10 @@ Common status behavior:
 - `404` entity not found
 - `500` server error
 
-## Authentication Model (Important for Testing)
+## Authentication Model (Testing)
 
-Login writes values into server session (`userId`, `userRole`, `authToken`).
-Protected endpoints use ACL filter checks.
+Login stores session data (`userId`, `userRole`, `authToken`).
+Protected endpoints require valid session context.
 
 For Postman/curl testing of protected routes:
 
@@ -141,10 +129,10 @@ http://localhost:8081
 
 ```json
 {
-  "username": "ankit_test_4",
+  "username": "user_1",
   "password": "Password@123",
-  "email": "ankit4@example.com",
-  "fullName": "Ankit Anand",
+  "email": "user_1@example.com",
+  "fullName": "User One",
   "role": "CUSTOMER"
 }
 ```
@@ -161,7 +149,7 @@ Expected:
 
 ```json
 {
-  "username": "ankit_test_4",
+  "username": "user_1",
   "password": "Password@123"
 }
 ```
@@ -185,8 +173,6 @@ Expected:
 
 ## Flight Endpoints
 
-### Public
-
 ### 4) Get all flights
 
 - `GET /api/flights`
@@ -209,13 +195,9 @@ Expected:
 
 Expected:
 - `200 OK`
-- `data` filtered by origin/destination
+- filtered results
 
-### Admin only (ACL: `MANAGE_FLIGHTS`)
-
-Requires logged-in admin session.
-
-### 7) Create flight
+### 7) Create flight (admin)
 
 - `POST /api/flights`
 - Body:
@@ -233,10 +215,10 @@ Requires logged-in admin session.
 ```
 
 Expected:
-- `200 OK` for admin
-- `401/403` if not authorized
+- `200 OK` for admin session
+- `401/403` if unauthorized
 
-### 8) Update flight
+### 8) Update flight (admin)
 
 - `PUT /api/flights/{id}`
 - Body example:
@@ -253,7 +235,7 @@ Expected:
 - `200 OK` if admin + flight exists
 - `404` if flight not found
 
-### 9) Delete flight
+### 9) Delete flight (admin)
 
 - `DELETE /api/flights/{id}`
 
@@ -262,8 +244,6 @@ Expected:
 - `404` if not found
 
 ## Booking Endpoints (Protected)
-
-Requires logged-in session with required ACL actions.
 
 ### 10) Create booking (new passenger)
 
@@ -274,10 +254,10 @@ Requires logged-in session with required ACL actions.
 {
   "flightId": 1,
   "newPassenger": {
-    "firstName": "Ankit",
-    "lastName": "Anand",
+    "firstName": "User",
+    "lastName": "One",
     "passportNumber": "P1234567",
-    "email": "ankit.passenger@example.com",
+    "email": "passenger@example.com",
     "phone": "+919999999999"
   }
 }
@@ -286,7 +266,7 @@ Requires logged-in session with required ACL actions.
 Expected:
 - `200 OK` booking created
 - `404` if flight missing
-- `400` for invalid passenger payload
+- `400` invalid payload
 
 ### 11) Create booking (existing passenger)
 
@@ -316,7 +296,7 @@ Expected:
 - `GET /api/bookings`
 
 Expected:
-- `200 OK` for roles with `VIEW_ALL_BOOKINGS` (typically admin)
+- `200 OK` for roles with `VIEW_ALL_BOOKINGS`
 - `403` for insufficient permission
 
 ### 14) Get my bookings
@@ -325,7 +305,7 @@ Expected:
 
 Expected:
 - `200 OK`
-- returns bookings for logged-in user session
+- user-scoped bookings
 
 ### 15) Cancel booking
 
@@ -360,13 +340,7 @@ curl -i -c cookie.txt -b cookie.txt "$BASE/api/bookings/my"
 curl -i -c cookie.txt -b cookie.txt -X POST "$BASE/api/auth/logout"
 ```
 
-## Detailed Fix Log
-
-For the full chronological debug/fix history, see:
-
-- `/Users/ankitanand/airline-reservation/BACKEND_FIXES_AND_API_TESTING.md`
-
 ## Notes
 
-- `fullName` is currently accepted in register payload but not persisted in the `users` table yet.
-- `GET /api/flights/search` accepts `date` param in route, but date filtering is not currently applied in facade logic.
+- `fullName` is accepted in register payload but is not yet persisted in the `users` table.
+- `GET /api/flights/search` accepts `date` param in route, but date filtering is not currently applied.
