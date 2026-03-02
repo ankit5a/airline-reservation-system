@@ -1,5 +1,0 @@
-/Users/ankitanand/airline-reservation==<local-path>
-airline123==<db-password>
-db.connection.username=airline_user==db.connection.username=<db_user>
-db.connection.password=airline123==db.connection.password=<db_password>
-application.modules.package=com.airline==application.modules.package=<package_name>
