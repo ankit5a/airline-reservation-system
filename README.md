@@ -2,6 +2,65 @@
 
 A multi-module Java backend for flight search, booking, and reservation management built with Ninja Framework, Guice, JPA/Hibernate, and PostgreSQL.
 
+## Project Folder Structure
+
+```
+airline-reservation/
+├── pom.xml                          (root POM)
+├── airline-entities/
+│   ├── pom.xml
+│   └── src/main/java/com/airline/entities/
+│       ├── Flight.java
+│       ├── Passenger.java
+│       ├── Booking.java
+│       └── User.java
+├── airline-web-dtos/
+│   ├── pom.xml
+│   └── src/main/java/com/airline/web/dtos/
+│       ├── FlightDto.java
+│       ├── BookingDto.java
+│       ├── PassengerDto.java
+│       ├── UserDto.java
+│       ├── LoginDto.java
+│       └── ApiResponseDto.java
+└── airline-web/
+    ├── pom.xml
+    └── src/main/
+        ├── java/com/airline/
+        │   ├── conf/
+        │   │   ├── Routes.java
+        │   │   └── Module.java
+        │   ├── controllers/
+        │   │   ├── FlightController.java
+        │   │   ├── FlightControllerImpl.java
+        │   │   ├── BookingController.java
+        │   │   ├── BookingControllerImpl.java
+        │   │   ├── AuthController.java
+        │   │   ├── AuthControllerImpl.java
+        │   │   ├── CorsController.java
+        │   │   └── CorsControllerImpl.java
+        │   ├── facade/
+        │   │   ├── FlightFacade.java
+        │   │   ├── FlightFacadeImpl.java
+        │   │   ├── BookingFacade.java
+        │   │   ├── BookingFacadeImpl.java
+        │   │   ├── AuthFacade.java
+        │   │   └── AuthFacadeImpl.java
+        │   ├── filters/
+        │   │   ├── CorsFilter.java
+        │   │   └── AclFilter.java
+        │   ├── exceptions/
+        │   │   ├── FlightNotFoundException.java
+        │   │   ├── BookingNotFoundException.java
+        │   │   └── InvalidRequestException.java
+        │   └── enums/
+        │       ├── UserRole.java
+        │       └── UserAction.java
+        └── resources/
+            ├── META-INF/persistence.xml
+            └── conf/application.conf
+```
+
 ## Architecture
 
 ```text
